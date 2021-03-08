@@ -11,5 +11,4 @@ import javax.persistence.Entity;
 @Getter
 public class Viewed extends BaseModel{
     Long quantity;
-
 }

@@ -38,7 +38,7 @@ public class UserController {
         if(response.isSuccessful()) {
             session.setAttribute("principal", response.getUser());
             if (response.getRole().equals("Admin")) {
-                return "admin-home";
+                return "add-movie";
             } else{
                 return "user-home";
             }

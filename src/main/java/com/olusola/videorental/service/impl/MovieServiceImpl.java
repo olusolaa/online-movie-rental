@@ -8,6 +8,7 @@ import com.olusola.videorental.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -27,7 +28,7 @@ public class MovieServiceImpl implements MovieService {
     public ResponseDto addMovie(Movie movie) {
         var response = new ResponseDto();
         try {
-                var movieInDb =  movieRepository.findMovieByTitle(movie);
+                var movieInDb =  movieRepository.findMovieByTitle(movie.getTitle());
 
                 if(movieInDb != null){
                     throw  new Exception("Movie Already Exists");
@@ -37,7 +38,7 @@ public class MovieServiceImpl implements MovieService {
                 movie1.setRated(movie.getRated());
                 movie1.setReleaseDate(movie.getReleaseDate());
                 movie1.setTitle(movie.getTitle());
-                movie1.setType(movie.getType());
+                movie1.setCategory(movie.getCategory());
                 var addedMovie =  movieRepository.save(movie1);
             response.setStatus(201);
             response.setSuccessful(true);
@@ -55,6 +56,26 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> allMovies() {
         return movieRepository.findAll();
+    }
+
+    @Override
+    public Movie getMovieByTitle(String title) {
+        return movieRepository.findMovieByTitle(title);
+    }
+
+    @Override
+    public List<Movie> viewMoviesByCategory(String category) {
+        return movieRepository.findAllByCategoryContains(category);
+    }
+
+    @Override
+    public List<Movie> viewMoviesByReleasedDate(Date date) {
+        return movieRepository.;
+    }
+
+    @Override
+    public List<Movie> viewMoviesByRated(String rated) {
+        return movieRepository.findAllByRated(rated);
     }
 
 

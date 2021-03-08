@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Date;
 
 
 @Slf4j
@@ -33,9 +38,44 @@ public class MovieController {
         return "add-movie";
     }
 
-    @GetMapping(path = "admin/movie-list")
-    public String listMovie(Model model) {
-        model.addAttribute("movie", movieService.allMovies());
+    @PostMapping(path = "add-movies")
+    public String addMoviePost(@ModelAttribute("movie") Movie movie){
+        movieService.addMovie(movie);
         return "movie-list";
     }
+
+    @GetMapping(path = "view/movie-list")
+    public String listMovie(Model model) {
+        model.addAttribute("movie", movieService.allMovies());
+        return "add-movie";
+    }
+
+    @GetMapping(path = "/view/movie/{title}")
+    public String viewMovieByTitle(@PathVariable String title){
+        movieService.getMovieByTitle(title);
+        return null;
+    }
+
+
+    @GetMapping(path ="/view/movie/{category}")
+    public String viewByCategory(@PathVariable String category){
+        movieService.viewMoviesByCategory(category);
+        return null;
+    }
+    @GetMapping(path = "/view/movie/{releaseDate}")
+    public String viewByReleaseDate(@PathVariable Date date ){
+        movieService.viewMoviesByReleasedDate(date);
+        return null;
+    }
+
+    @GetMapping(path = "/view/movie/{releaseDate}")
+    public String viewByRated(@PathVariable String rated ){
+        movieService.viewMoviesByRated(rated);
+        return null;
+    }
+
+
+
+
+
 }
