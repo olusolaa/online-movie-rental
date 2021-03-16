@@ -1,17 +1,19 @@
 package com.olusola.videorental.model;
 
+import com.olusola.videorental.model.user_db.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import java.util.List;
+import javax.persistence.*;
 
 @Entity
 @Setter
 @Getter
-public class Cart extends BaseModel{
+public class Cart{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @OneToOne
     private User user;

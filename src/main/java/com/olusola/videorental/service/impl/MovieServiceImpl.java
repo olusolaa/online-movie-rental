@@ -1,82 +1,157 @@
 package com.olusola.videorental.service.impl;
 
-import com.olusola.videorental.dtos.ResponseDto;
-import com.olusola.videorental.model.Movie;
+import com.olusola.videorental.dtos.ApiResponse;
+import com.olusola.videorental.dtos.movie.CategoryRequest;
+import com.olusola.videorental.dtos.movie.MovieRequest;
+import com.olusola.videorental.model.product_db.Category;
+import com.olusola.videorental.model.product_db.Movie;
+import com.olusola.videorental.repository.CategoryRepository;
 import com.olusola.videorental.repository.MovieRepository;
-import com.olusola.videorental.repository.UserRepository;
 import com.olusola.videorental.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MovieServiceImpl implements MovieService {
 
     MovieRepository movieRepository;
-    UserRepository userRepository;
+    CategoryRepository categoryRepository;
 
     @Autowired
 
-    public MovieServiceImpl(MovieRepository movieRepository, UserRepository userRepository) {
+    public MovieServiceImpl(MovieRepository movieRepository, CategoryRepository categoryRepository) {
         this.movieRepository = movieRepository;
-        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
-    public ResponseDto addMovie(Movie movie) {
-        var response = new ResponseDto();
-        try {
-                var movieInDb =  movieRepository.findMovieByTitle(movie.getTitle());
+    public ResponseEntity<?> addMovie(MovieRequest movieRequest) {
 
-                if(movieInDb != null){
-                    throw  new Exception("Movie Already Exists");
-                }
-                var movie1 = new Movie();
-                movie1.setMovieUrl(movie.getMovieUrl());
-                movie1.setRated(movie.getRated());
-                movie1.setReleaseDate(movie.getReleaseDate());
-                movie1.setTitle(movie.getTitle());
-                movie1.setCategory(movie.getCategory());
-                var addedMovie =  movieRepository.save(movie1);
-            response.setStatus(201);
-            response.setSuccessful(true);
-            response.setData(addedMovie);
-            return  response;
-        }catch (Exception e) {
-            response.setStatus(500);
-            response.setSuccessful(false);
-            response.setData(null);
-            response.setError(e.getMessage());
-            return response;
+        Movie movie = new Movie(movieRequest.getMovieId(), movieRequest.getTitle(),
+                movieRequest.getRated(), movieRequest.getReleaseDate(),
+                movieRequest.getMovieUrl(), movieRequest.getPrice(),
+                categoryRepository.findById(movieRequest.getCategoryId()).orElse(null));
+        Movie result = movieRepository.save(movie);
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/movie/{movieId}")
+                .buildAndExpand(result.getMovieId()).toUri();
+
+        return ResponseEntity.created(location).body(new ApiResponse(true,
+                "Movie has been added successfully!"));
+    }
+
+
+    @Override
+    public ResponseEntity<?> updateMovie(MovieRequest movieRequest, Long productId) {
+        Movie movie = movieRepository.findById(productId).orElse(null);
+        if (movie != null) {
+            movie.setMovieId(movieRequest.getMovieId());
+            movie.setTitle(movieRequest.getTitle());
+            movie.setMovieUrl(movieRequest.getMovieUrl());
+            movie.setPrice(movieRequest.getPrice());
+            movie.setRated(movie.getRated());
+            movie.setReleaseDate(movieRequest.getReleaseDate());
+            movie.setCategory(categoryRepository.findById(movieRequest.getCategoryId()).orElse(null));
+            Movie result = movieRepository.save(movie);
+
+            URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/movie/{movieId}")
+                    .buildAndExpand(result.getMovieId()).toUri();
+
+            return ResponseEntity.created(location).body(new ApiResponse(true,
+                    "Movie has been updated successfully!"));
+        } else {
+            return new ResponseEntity<>(new ApiResponse(false, "Specified movie is not available!"),
+                    HttpStatus.BAD_REQUEST);
         }
     }
 
     @Override
-    public List<Movie> allMovies() {
-        return movieRepository.findAll();
+    public ResponseEntity<?> addCategory(CategoryRequest categoryRequest) {
+        if (categoryRepository.existsByName(categoryRequest.getName())) {
+            return new ResponseEntity(new ApiResponse(false, "Already there " +
+                    "is category named " + categoryRequest.getName()), HttpStatus.BAD_REQUEST);
+        }
+        Category result = categoryRepository
+                .save(new Category(categoryRequest.getName(), categoryRequest.getDescription()));
+
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/category/{id}")
+                .buildAndExpand(result.getId()).toUri();
+
+        return ResponseEntity.created(location).body(new ApiResponse(true,
+                "Category has been added successfully!"));
     }
 
     @Override
-    public Movie getMovieByTitle(String title) {
-        return movieRepository.findMovieByTitle(title);
+    public ResponseEntity<?> updateCategory(CategoryRequest categoryRequest, Long catId) {
+        Category category = categoryRepository.findById(catId).orElse(null);
+        if (category != null) {
+            category.setName(categoryRequest.getName());
+            category.setDescription(categoryRequest.getDescription());
+            Category result = categoryRepository.save(category);
+            URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/category/{id}")
+                    .buildAndExpand(result.getId()).toUri();
+
+            return ResponseEntity.created(location).body(new ApiResponse(true,
+                    "Category has been updated successfully!"));
+        }
+
+        return new ResponseEntity(
+                new ApiResponse(false, "There is no such  category found!" + catId),
+                HttpStatus.BAD_REQUEST);    }
+
+    @Override
+    public ResponseEntity<?> getCategory(Optional<Integer> categoryId) {
+        if(!categoryId.isPresent()) {
+            List<Category> categories = categoryRepository.findAll();
+            return new ResponseEntity<>(categories, HttpStatus.OK);
+        }
+        Optional<Category> category   = categoryRepository.findById(Long.valueOf(categoryId.get()));
+        return category.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new
+                ResponseEntity(new ApiResponse(false, "Specified category is not available!"),
+                HttpStatus.BAD_REQUEST));
     }
 
     @Override
-    public List<Movie> viewMoviesByCategory(String category) {
-        return movieRepository.findAllByCategoryContains(category);
+    public ResponseEntity<?> getMovie(Optional<String> productId) {
+        if(!productId.isPresent()) {
+            List<Movie> movies = movieRepository.findAll();
+            return new ResponseEntity<>(movies, HttpStatus.OK);
+        }
+
+        Optional<Movie> result = movieRepository.findByMovieId(productId.get());
+
+        if(productId.isPresent())
+            return new ResponseEntity<>(result.get(), HttpStatus.OK);
+        else
+            return new ResponseEntity(new ApiResponse(false, "Specified movie is not available!"),
+                    HttpStatus.BAD_REQUEST);
     }
 
     @Override
-    public List<Movie> viewMoviesByReleasedDate(Date date) {
-        return movieRepository.;
+    public ResponseEntity<?> getMovieById(Long id) {
+        Optional<Movie> result = movieRepository.findById(id);
+
+        if(result.isPresent())
+            return new ResponseEntity<>(result.get(), HttpStatus.OK);
+        else
+            return new ResponseEntity(new ApiResponse(false, "Specified movie is not available!"),
+                    HttpStatus.BAD_REQUEST);
     }
 
     @Override
-    public List<Movie> viewMoviesByRated(String rated) {
-        return movieRepository.findAllByRated(rated);
+    public ResponseEntity<?> viewMoviesByRated(Optional<String> rated) {
+        return null;
     }
 
-
+    @Override
+    public ResponseEntity<?> viewMovieByReleasedDate(Optional<Date> productId) {
+        return null;
+    }
 }
