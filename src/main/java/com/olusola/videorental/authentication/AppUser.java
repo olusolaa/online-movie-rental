@@ -1,34 +1,27 @@
 package com.olusola.videorental.authentication;
-
+import com.olusola.videorental.model.User;
+import com.olusola.videorental.model.UserRole;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AppUser implements UserDetails {
-    private final String username;
-    private final String password;
+    private final User user;
     private final Collection<? extends GrantedAuthority> grantedAuthorities;
-    private final boolean isAccountNonExpired;
-    private final boolean isAccountNonLocked;
-    private final boolean isCredentialsNonExpired;
-    private final boolean isEnabled;
+    private  boolean isAccountNonExpired;
+    private  boolean isAccountNonLocked;
+    private  boolean isCredentialsNonExpired;
+    private  boolean isEnabled;
 
-    public AppUser(String username,
-                   String password,
-                   Collection<? extends GrantedAuthority> grantedAuthorities,
-                   boolean isAccountNonExpired,
-                   boolean isAccountNonLocked,
-                   boolean isCredentialsNonExpired,
-                   boolean isEnabled) {
-        this.username = username;
-        this.password = password;
-        this.grantedAuthorities = grantedAuthorities;
-        this.isAccountNonExpired = isAccountNonExpired;
-        this.isAccountNonLocked = isAccountNonLocked;
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
-        this.isEnabled = isEnabled;
+    public AppUser(User user) {
+        this.user = user;
+        this.grantedAuthorities = user.getGrantedAuthories();
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -37,12 +30,12 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return user.getUsername();
     }
 
     @Override
@@ -64,4 +57,5 @@ public class AppUser implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
+
 }

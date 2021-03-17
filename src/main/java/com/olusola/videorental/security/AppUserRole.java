@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import static com.olusola.videorental.security.AppUserPermission.*;
 
+
 public enum AppUserRole {
     USER(Sets.newHashSet()),
     ADMIN(Sets.newHashSet(MOVIES_READ, MOVIES_WRITE, USER_WRITE, USER_READ)),

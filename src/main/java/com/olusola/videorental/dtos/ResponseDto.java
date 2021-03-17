@@ -1,6 +1,6 @@
 package com.olusola.videorental.dtos;
 
-import com.olusola.videorental.model.user_db.User;
+import com.olusola.videorental.model.User;
 import lombok.Getter;
 import lombok.Setter;
 

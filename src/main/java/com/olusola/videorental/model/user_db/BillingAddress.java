@@ -38,9 +38,9 @@ public class BillingAddress {
     @Size(max = 64)
     private String country;
 
-    @JsonIgnore
+    /*@JsonIgnore
     @OneToOne
-    private User user;
+    private User user;*/
 
 
     public BillingAddress(@NotBlank @Size(max = 64) String street, @NotBlank @Size(max = 64) String city,

@@ -16,8 +16,8 @@ public class CreditCard {
     private String number;
     private String validationDate;
 
-    @ManyToOne
-    private User user;
+    /*@ManyToOne
+    private User user;*/
 
 
 

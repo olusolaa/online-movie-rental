@@ -1,4 +1,4 @@
-package com.olusola.videorental.security;
+package com.olusola.videorental.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

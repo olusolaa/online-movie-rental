@@ -16,7 +16,7 @@ import static com.olusola.videorental.security.AppUserRole.*;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         private final UserDetailsServiceImpl userServiceDetails;
         private final PasswordEncoder passwordEncoder;
@@ -37,11 +37,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif",
                                 "/**/*.svg",  "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js")
                     .permitAll()
-                    .antMatchers("/api/**").hasRole(USER.name())
-                    .antMatchers("/admin/api/**").hasRole(ADMIN.name())
+                    //.antMatchers("/api/**").hasRole(USER.name())
                     .anyRequest()
                     .authenticated()
-                    .and().formLogin();
+                    .and().httpBasic();
         }
 
     @Override

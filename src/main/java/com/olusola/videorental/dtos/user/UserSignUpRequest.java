@@ -27,6 +27,7 @@ public class UserSignUpRequest {
 
     @NotBlank(message = "Email cannot be empty!")
     @Size(max = 40)
+
     @Email
     private String email;
 

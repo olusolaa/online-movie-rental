@@ -12,7 +12,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final AppUserService appUserService;
 
     @Autowired
-    public UserDetailsServiceImpl(@Qualifier("mock-data") AppUserService appUserService) {
+    public UserDetailsServiceImpl(@Qualifier("jpa") AppUserService appUserService) {
         this.appUserService = appUserService;
     }
 
@@ -21,4 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return appUserService.selectAppUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("Username %s not found", username)));
     }
+
+
 }
