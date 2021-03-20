@@ -17,13 +17,13 @@
 //
 //    private ShoppingCartService shoppingCartService;
 //    private MovieService movieService;
-//    private MyUserService userService;
+//    private MyUserService UserService;
 //
 //    @Autowired
-//    public MovieController(ShoppingCartService shoppingCartService, MovieService movieService, UserService userService) {
+//    public MovieController(ShoppingCartService shoppingCartService, MovieService movieService, UserService UserService) {
 //        this.shoppingCartService = shoppingCartService;
 //        this.movieService = movieService;
-//        this.userService = userService;
+//        this.UserService = UserService;
 //    }
 
 //    @GetMapping(path = "admin/add-movie")

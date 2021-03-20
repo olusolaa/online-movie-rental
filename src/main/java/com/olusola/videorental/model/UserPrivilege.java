@@ -18,7 +18,7 @@ public class UserPrivilege {
     private final String permission;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<UserRole> userRoles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> users = new HashSet<>();

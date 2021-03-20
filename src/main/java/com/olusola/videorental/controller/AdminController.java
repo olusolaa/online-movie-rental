@@ -1,6 +1,7 @@
 package com.olusola.videorental.controller;
 
 import com.olusola.videorental.model.MovieSimple;
+import com.olusola.videorental.model.User;
 import com.olusola.videorental.model.product_db.Movie;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/api/v1/")
+@RequestMapping("/admin/api/v1")
 public class AdminController {
 
     private final List<MovieSimple> MOVIES = List.of(
@@ -22,7 +23,7 @@ public class AdminController {
     );
 
     @GetMapping("/movies")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<MovieSimple> listAllMovie(){
       return MOVIES;
     }

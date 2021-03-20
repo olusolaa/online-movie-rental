@@ -1,37 +1,37 @@
 package com.olusola.videorental.model;
 
-import com.google.common.collect.Sets;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.olusola.videorental.security.AppUserRole;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import static com.olusola.videorental.security.AppUserRole.USER;
 
+@EqualsAndHashCode
 @Entity
-@Getter
-@Setter
-public class UserRole {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private AppUserRole appUserRole;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<UserPrivilege> privileges;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    private Set<UserPrivilege> privileges;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<User> users = new HashSet<>();
-    public UserRole() {
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    private Set<User> users = new HashSet<>();
+/*    public Role() {
         this(USER.name(), Sets.newHashSet());
-    }
+    }*/
 
-    public UserRole(String name, Set<UserPrivilege> privileges) {
+ /*   public Role(String name, Set<UserPrivilege> privileges) {
         this.name = name;
         this.privileges = privileges;
     }
@@ -39,9 +39,9 @@ public class UserRole {
 
     public Set<UserPrivilege> getPrivileges(){
         return privileges;
-    }
+    }*/
 
-
+/*
     public Set<SimpleGrantedAuthority> getGrantedAuthorities(){
         Set<SimpleGrantedAuthority> grantedAuthorities = getPrivileges()
                       .stream()
@@ -52,7 +52,7 @@ public class UserRole {
 
         return grantedAuthorities;
 
-    }
+    }*/
 
 
 }

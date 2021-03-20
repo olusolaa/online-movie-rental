@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.olusola.videorental.security.AppUserRole.*;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -30,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            http
+            http.httpBasic().and()
                     .csrf()
                     .disable()
                     .authorizeRequests()
@@ -39,8 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     //.antMatchers("/api/**").hasRole(USER.name())
                     .anyRequest()
-                    .authenticated()
-                    .and().httpBasic();
+                    .authenticated();
         }
 
     @Override

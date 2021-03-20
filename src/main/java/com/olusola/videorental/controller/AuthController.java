@@ -14,16 +14,16 @@ import javax.validation.Valid;
 public class AuthController {
 
     @Autowired
-    UserService userService;
+    UserService UserService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        return userService.loginUser(loginRequest);
+        return UserService.loginUser(loginRequest);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserSignUpRequest signUpRequest) {
-        return userService.createUser(signUpRequest);
+        return UserService.createUser(signUpRequest);
 
     }
 }
