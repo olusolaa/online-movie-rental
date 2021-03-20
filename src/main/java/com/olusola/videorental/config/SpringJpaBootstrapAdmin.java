@@ -1,10 +1,7 @@
 package com.olusola.videorental.config;
 
-import com.google.common.collect.Sets;
-import com.olusola.videorental.authentication.MyUserDetail;
 import com.olusola.videorental.authentication.UserService;
 import com.olusola.videorental.model.User;
-import com.olusola.videorental.model.UserPrivilege;
 import com.olusola.videorental.model.Role;
 import com.olusola.videorental.repository.UserPrivilegeRepository;
 import com.olusola.videorental.repository.RoleRepository;
@@ -16,10 +13,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-
-import static com.olusola.videorental.security.AppUserPermission.*;
-import static com.olusola.videorental.security.AppUserRole.*;
-import static com.olusola.videorental.security.AppUserRole.ADMIN;
 
 /**
  * Adds the first

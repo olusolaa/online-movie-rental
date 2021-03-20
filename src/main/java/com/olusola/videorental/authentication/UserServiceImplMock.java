@@ -22,7 +22,7 @@ public class UserServiceImplMock implements UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<MyUserDetail> selectAppUserByUsername(String username) {
+    public Optional<UserDetailImpl> selectAppUserByUsername(String username) {
         return listAllAppUsers()
                 .stream()
                 .filter(appUser -> username.equals(appUser.getUsername()))
@@ -30,13 +30,13 @@ public class UserServiceImplMock implements UserService {
     }
 
     @Override
-    public MyUserDetail addUser(User user) {
+    public UserDetailImpl addUser(User user) {
         User savedUser = userRepository.save(user);
 
-        return new MyUserDetail(savedUser);
+        return new UserDetailImpl(savedUser);
     }
 
-    public List<MyUserDetail> listAllAppUsers(){
+    public List<UserDetailImpl> listAllAppUsers(){
         User user1 = new User("shola", passwordEncoder.encode("123456"));
 
         User user2 = new User("temi", passwordEncoder.encode("password"));
@@ -44,17 +44,17 @@ public class UserServiceImplMock implements UserService {
 
         User user3 = new User("john", passwordEncoder.encode("123456"));
 
-        List<MyUserDetail> myUserDetails = List.of(
+        List<UserDetailImpl> myUserDetails = List.of(
 
-                new MyUserDetail(
+                new UserDetailImpl(
                     user1
                 ),
 
-                new MyUserDetail(
+                new UserDetailImpl(
                     user2
                 ),
 
-                new MyUserDetail(
+                new UserDetailImpl(
                    user3
                 )
         );

@@ -20,7 +20,6 @@ public class UserController {
     );
 
     @GetMapping("/movies")
-    @PreAuthorize("hasAuthority('USER')")
     public List<MovieSimple> listAllMovie(){
         return MOVIES;
     }

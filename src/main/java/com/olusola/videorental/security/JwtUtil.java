@@ -1,4 +1,4 @@
-/*package com.olusola.videorental.security;
+package com.olusola.videorental.security;
 
 
 import io.jsonwebtoken.Claims;
@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-        private String SECRET_KEY = "secret";
+        private final String SECRET_KEY = "secret";
 
         public String extractUsername(String token) {
             return extractClaim(token, Claims::getSubject);
@@ -37,7 +37,6 @@ public class JwtUtil {
             return extractExpiration(token).before(new Date());
         }
 
-        // this has been taken care of by generate token in JwtTokenProvider
         public String generateToken(UserDetails userDetails) {
             Map<String, Object> claims = new HashMap<>();
             return createToken(claims, userDetails.getUsername());
@@ -55,4 +54,4 @@ public class JwtUtil {
             return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         }
 
-    }*/
+    }

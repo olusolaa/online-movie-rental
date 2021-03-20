@@ -1,6 +1,5 @@
 package com.olusola.videorental.service.impl;
 
-import com.olusola.videorental.authentication.MyUserDetail;
 import com.olusola.videorental.authentication.UserService;
 import com.olusola.videorental.model.User;
 import com.olusola.videorental.repository.UserRepository;
@@ -9,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service("jpa")
 public class UserServiceImpl implements UserService {
